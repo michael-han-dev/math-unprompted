@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+
+# Course material is personal and often copyrighted. Keep the folder, ignore its contents.
+syllabi/*
+!syllabi/README.md
