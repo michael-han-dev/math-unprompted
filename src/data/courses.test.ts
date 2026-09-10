@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ALL_COURSES_ID, COURSES, COURSE_OPTIONS, getCourseOption, getPool } from './courses';
+import { ALL_COURSES_ID, COURSES, COURSE_OPTIONS, getCourseOption, getPool, kindOf } from './courses';
 
 const MIN_CONCEPTS = 12;
 const MIN_THEOREMS = 8;
@@ -29,19 +29,23 @@ describe('courses data', () => {
     expect(long).toEqual([]);
   });
 
-  it('pools and dedupes for "All courses"', () => {
-    const all = getPool(ALL_COURSES_ID, 'concepts');
-    const raw = COURSES.flatMap((c) => c.concepts);
-    expect(new Set(all).size).toBe(all.length);
-    expect(all.length).toBeLessThanOrEqual(raw.length);
-    expect(all.length).toBe(new Set(raw).size);
-    expect(getPool(ALL_COURSES_ID, 'theorems').length).toBe(new Set(COURSES.flatMap((c) => c.theorems)).size);
+  it('never lists a topic as both a definition and a theorem', () => {
+    const theorems = new Set(COURSES.flatMap((c) => c.theorems));
+    expect(COURSES.flatMap((c) => c.concepts).filter((t) => theorems.has(t))).toEqual([]);
   });
 
-  it('returns a course pool by id and falls back sensibly', () => {
-    expect(getPool('real-analysis', 'theorems')).toBe(COURSES[0].theorems);
-    expect(getPool('nope', 'concepts')).toBe(COURSES[0].concepts);
+  it('pools a course, or all courses, without duplicates', () => {
+    const one = getPool('real-analysis');
+    expect(one).toEqual([...COURSES[0].concepts, ...COURSES[0].theorems]);
+    expect(getPool('nope')).toEqual(one);
+    const all = getPool(ALL_COURSES_ID);
+    expect(all.length).toBe(new Set(COURSES.flatMap((c) => [...c.concepts, ...c.theorems])).size);
     expect(COURSE_OPTIONS[0].id).toBe(ALL_COURSES_ID);
     expect(getCourseOption('nope').id).toBe(ALL_COURSES_ID);
+  });
+
+  it('labels theorems and definitions', () => {
+    expect(kindOf(COURSES[0].theorems[0])).toBe('Theorem');
+    expect(kindOf(COURSES[0].concepts[0])).toBe('Definition');
   });
 });

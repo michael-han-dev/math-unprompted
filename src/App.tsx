@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CourseSelect } from './components/CourseSelect';
-import { ModeSwitch } from './components/ModeSwitch';
 import { Reel } from './components/Reel';
 import { SettingsDialog } from './components/SettingsDialog';
 import { SpiralField } from './components/SpiralField';
 import { TimerOverlay, type Phase } from './components/TimerOverlay';
-import { ALL_COURSES_ID, getPool } from './data/courses';
-import { getMode, type ModeId } from './data/modes';
+import { ALL_COURSES_ID, getPool, kindOf } from './data/courses';
 import { formatDuration } from './lib/format';
 import { useReducedMotion } from './lib/motion';
 import { playDone, playLand, playTick, setMuted, unlockAudio } from './lib/sounds';
@@ -26,13 +24,11 @@ import { useCountdown } from './lib/timer';
 export const SITE_NAME = 'Chalk Talk';
 
 export function App() {
-  const [modeId, setModeId] = useState<ModeId>('off-the-cuff');
   const [courseId, setCourseId] = useState<string>(ALL_COURSES_ID);
   const [settings, setSettings] = useState<Settings>(() => loadSettings(getLocalStorage()));
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const mode = getMode(modeId);
-  const pool = useMemo(() => getPool(courseId, mode.pool), [courseId, mode.pool]);
+  const pool = useMemo(() => getPool(courseId), [courseId]);
 
   const [display, setDisplay] = useState(() => pickRandom(pool));
   const [landed, setLanded] = useState<string | null>(null);
@@ -82,13 +78,7 @@ export function App() {
   const changeCourse = (id: string) => {
     if (locked || id === courseId) return;
     setCourseId(id);
-    redraw(getPool(id, mode.pool));
-  };
-
-  const changeMode = (id: ModeId) => {
-    if (locked || id === modeId) return;
-    setModeId(id);
-    redraw(getPool(courseId, getMode(id).pool));
+    redraw(getPool(id));
   };
 
   const spin = useCallback(() => {
@@ -156,20 +146,16 @@ export function App() {
     });
   }, [startCountdown, settings.speechSeconds]);
 
-  const startTimer = () => {
+  const startResearch = () => {
     if (!landed || locked) return;
     unlockAudio();
     returnFocusRef.current = document.activeElement as HTMLElement | null;
-    if (mode.id === 'deep-research') {
-      setPhase('research');
-      startCountdown(settings.researchSeconds, () => {
-        setPhase('ready');
-        setCountdown(settings.speechSeconds);
-        playDone();
-      });
-    } else {
-      startSpeech();
-    }
+    setPhase('research');
+    startCountdown(settings.researchSeconds, () => {
+      setPhase('ready');
+      setCountdown(settings.speechSeconds);
+      playDone();
+    });
   };
 
   const finishResearch = () => {
@@ -198,11 +184,7 @@ export function App() {
   }, [inOverlay, closeOverlay]);
 
   const totalSeconds = phase === 'research' ? settings.researchSeconds : settings.speechSeconds;
-  const eyebrow = spinning ? 'Drawing…' : landed ? `${mode.env} ${spinCount}.` : 'Ready';
-  const startLabel =
-    mode.id === 'deep-research'
-      ? `Start ${formatDuration(settings.researchSeconds)} research`
-      : `Start ${formatDuration(settings.speechSeconds)} timer`;
+  const eyebrow = spinning ? 'Drawing…' : landed ? `${kindOf(landed)} ${spinCount}.` : 'Ready';
 
   return (
     <div className="page">
@@ -218,8 +200,7 @@ export function App() {
       <main className="stage">
         <div className="stage-body" inert={backgroundInert || undefined}>
           <div className="controls">
-            <ModeSwitch value={modeId} onChange={changeMode} disabled={locked} />
-            <p className="mode-blurb">{mode.blurb}</p>
+            <p className="blurb">Spin a topic, read up on a research timer, then explain it out loud.</p>
             <CourseSelect value={courseId} onChange={changeCourse} disabled={locked} />
           </div>
 
@@ -234,8 +215,8 @@ export function App() {
             <button type="button" className="btn primary" onClick={spin} disabled={locked}>
               {spinning ? 'Spinning…' : landed ? 'Spin again' : 'Spin'}
             </button>
-            <button type="button" className="btn secondary" onClick={startTimer} disabled={!landed || locked}>
-              {startLabel}
+            <button type="button" className="btn secondary" onClick={startResearch} disabled={!landed || locked}>
+              Start {formatDuration(settings.researchSeconds)} research
             </button>
           </div>
           <SettingsDialog
@@ -259,7 +240,7 @@ export function App() {
         <TimerOverlay
           phase={phase}
           topic={landed}
-          arc={mode.arc}
+          kind={kindOf(landed)}
           seconds={seconds}
           totalSeconds={totalSeconds}
           speechSeconds={settings.speechSeconds}

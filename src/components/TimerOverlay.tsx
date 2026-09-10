@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
+import type { TopicKind } from '../data/courses';
 
 const NUMERALS = ['i', 'ii', 'iii'];
+const ARCS: Record<TopicKind, readonly [string, string, string]> = {
+  Definition: ['Define it', 'Example', 'Why it matters'],
+  Theorem: ['State it', 'Proof idea', 'Why it matters'],
+};
 import { arcStagesHit, ringProgress } from '../lib/arc';
 import { formatClock, formatDuration } from '../lib/format';
 
@@ -9,7 +14,7 @@ export type Phase = 'idle' | 'research' | 'ready' | 'speech' | 'done';
 interface Props {
   phase: Exclude<Phase, 'idle'>;
   topic: string;
-  arc: readonly [string, string, string];
+  kind: TopicKind;
   seconds: number;
   totalSeconds: number;
   speechSeconds: number;
@@ -21,7 +26,7 @@ interface Props {
 export function TimerOverlay({
   phase,
   topic,
-  arc,
+  kind,
   seconds,
   totalSeconds,
   speechSeconds,
@@ -56,7 +61,7 @@ export function TimerOverlay({
         {isResearch && <p className="timer-phase">Researching</p>}
         {isSpeaking && (
           <ol className="speech-stages" aria-label="Speech arc">
-            {arc.map((stage, i) => (
+            {ARCS[kind].map((stage, i) => (
               <li key={stage} className={`speech-stage ${i < stagesHit ? 'is-hit' : 'is-pending'}`}>
                 <span className="speech-stage-num">{NUMERALS[i]}.</span>
                 <span className="speech-stage-label">{stage}</span>

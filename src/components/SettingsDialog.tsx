@@ -112,7 +112,6 @@ export function SettingsDialog({ open, onOpenChange, settings, onChange, disable
               />
               <DurationField
                 label="Research"
-                hint="Deep research only"
                 minutes={researchMinutes}
                 min={RESEARCH_RANGE.minSeconds / 60}
                 max={RESEARCH_RANGE.maxSeconds / 60}

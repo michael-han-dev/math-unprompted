@@ -142,61 +142,12 @@ a {
   width: min(100%, 400px);
 }
 
-.mode-blurb {
+.blurb {
   margin: 0;
-  min-height: 2.6em;
   font-size: 0.86rem;
   color: var(--muted);
   text-align: center;
   text-wrap: balance;
-}
-
-/* ---------- mode tabs ---------- */
-.mode-tabs {
-  display: flex;
-  gap: 1.75rem;
-}
-
-.mode-tabs.is-disabled {
-  opacity: 0.45;
-}
-
-.mode-tab {
-  position: relative;
-  padding: 0.35rem 0.1rem;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.mode-tab::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.mode-tab.is-active {
-  color: var(--ink);
-}
-
-.mode-tab.is-active::after {
-  transform: scaleX(1);
-}
-
-.mode-tab:disabled {
-  cursor: not-allowed;
 }
 
 /* ---------- course select ---------- */
@@ -393,7 +344,6 @@ a {
 
 .btn:focus-visible,
 .course-trigger:focus-visible,
-.mode-tab:focus-visible,
 .settings-trigger:focus-visible,
 .made-by:focus-visible {
   outline: 2px solid var(--accent);
@@ -504,8 +454,7 @@ a {
 }
 
 .settings-panel-blurb,
-.settings-note,
-.duration-hint {
+.settings-note {
   margin: 0.25rem 0 0;
   font-size: 0.85rem;
   color: var(--muted);
@@ -828,7 +777,6 @@ a {
   .course-menu {
     animation: none !important;
   }
-  .mode-tab::after,
   .speech-stage {
     transition: none;
   }

@@ -1,7 +1,9 @@
 /**
- * Topic lists, one course per syllabus in ./syllabi. `concepts` feed Off the cuff (definitions
- * you should know cold); `theorems` feed Deep research (named results worth reading up on first).
+ * Topic lists, one course per syllabus in ./syllabi. `concepts` are definitions and objects,
+ * `theorems` are named results. Both feed the spin; the list decides the label and the speech arc.
  */
+
+export type TopicKind = 'Definition' | 'Theorem';
 
 export interface Course {
   id: string;
@@ -512,11 +514,14 @@ export function getCourseOption(id: string): CourseOption {
   return COURSE_OPTIONS.find((c) => c.id === id) ?? COURSE_OPTIONS[0];
 }
 
-/** The list a given course contributes to a mode. "All courses" pools and dedupes. */
-export function getPool(courseId: string, kind: 'concepts' | 'theorems'): string[] {
-  if (courseId === ALL_COURSES_ID) {
-    return [...new Set(COURSES.flatMap((c) => c[kind]))];
-  }
-  const course = COURSES.find((c) => c.id === courseId) ?? COURSES[0];
-  return course[kind];
+/** Every topic of one course, or of all courses, without duplicates. */
+export function getPool(courseId: string): string[] {
+  const courses = courseId === ALL_COURSES_ID ? COURSES : [COURSES.find((c) => c.id === courseId) ?? COURSES[0]];
+  return [...new Set(courses.flatMap((c) => [...c.concepts, ...c.theorems]))];
+}
+
+const THEOREMS = new Set(COURSES.flatMap((c) => c.theorems));
+
+export function kindOf(topic: string): TopicKind {
+  return THEOREMS.has(topic) ? 'Theorem' : 'Definition';
 }

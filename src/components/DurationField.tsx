@@ -3,14 +3,13 @@ import { formatDuration } from '../lib/format';
 
 interface Props {
   label: string;
-  hint?: string;
   minutes: number;
   min: number;
   max: number;
   onChangeMinutes: (minutes: number) => void;
 }
 
-export function DurationField({ label, hint, minutes, min, max, onChangeMinutes }: Props) {
+export function DurationField({ label, minutes, min, max, onChangeMinutes }: Props) {
   const id = useId();
   return (
     <div className="duration-field">
@@ -40,7 +39,6 @@ export function DurationField({ label, hint, minutes, min, max, onChangeMinutes 
         <span>{min} min</span>
         <span>{max} min</span>
       </div>
-      {hint && <p className="duration-hint">{hint}</p>}
     </div>
   );
 }
