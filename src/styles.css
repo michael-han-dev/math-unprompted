@@ -1,4 +1,3 @@
-/* ---------- tokens: blackboard + chalk ---------- */
 :root {
   --font-display: 'STIX Two Text', 'Iowan Old Style', 'Times New Roman', Georgia, serif;
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -14,7 +13,6 @@
   --accent: #f0d27a;
   --accent-ink: #1a1508;
   --research: #9ed0e6;
-  --good: #b8e0b0;
 
   --radius: 0.5rem;
 
@@ -59,7 +57,6 @@ a {
   border: 0;
 }
 
-/* ---------- page + field ---------- */
 .page {
   position: relative;
   min-height: 100svh;
@@ -80,7 +77,6 @@ a {
   background: radial-gradient(120% 90% at 74% 38%, #111a17 0%, var(--bg) 60%);
 }
 
-/* ---------- top bar ---------- */
 .topbar {
   width: min(100%, 1040px);
   display: flex;
@@ -118,7 +114,6 @@ a {
   border-color: var(--line-strong);
 }
 
-/* ---------- stage ---------- */
 .stage,
 .stage-body {
   width: 100%;
@@ -150,7 +145,6 @@ a {
   text-wrap: balance;
 }
 
-/* ---------- course select ---------- */
 .course-select {
   position: relative;
   width: 100%;
@@ -251,7 +245,6 @@ a {
   background: rgba(240, 210, 122, 0.12);
 }
 
-/* ---------- reel ---------- */
 .reel {
   display: flex;
   flex-direction: column;
@@ -303,7 +296,6 @@ a {
   animation: topic-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ---------- actions + buttons ---------- */
 .actions,
 .actions-main {
   display: flex;
@@ -379,7 +371,6 @@ a {
   color: var(--ink);
 }
 
-/* ---------- settings ---------- */
 .settings-trigger {
   appearance: none;
   display: inline-grid;
@@ -511,7 +502,6 @@ a {
   margin-top: 1.25rem;
 }
 
-/* ---------- timer overlay ---------- */
 .timer-overlay {
   z-index: 20;
 }
@@ -546,43 +536,6 @@ a {
   font-variant: small-caps;
   letter-spacing: 0.08em;
   color: var(--research);
-}
-
-.speech-stages {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  width: min(100%, 560px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.speech-stage {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.5rem 0.25rem;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  transition: color 0.35s, border-color 0.35s;
-}
-
-.speech-stage-num {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1rem;
-}
-
-.speech-stage-label {
-  font-size: clamp(0.8rem, 2.2vw, 0.95rem);
-  font-weight: 600;
-}
-
-.speech-stage.is-hit {
-  color: var(--good);
-  border-color: var(--good);
 }
 
 .timer-ring {
@@ -646,7 +599,6 @@ a {
   gap: 0.7rem;
 }
 
-/* ---------- credit ---------- */
 .credit {
   padding-top: 1.25rem;
   font-size: 0.78rem;
@@ -660,7 +612,6 @@ a {
   text-underline-offset: 0.2em;
 }
 
-/* ---------- error screen ---------- */
 .error-screen {
   min-height: 100svh;
   display: flex;
@@ -688,7 +639,6 @@ a {
   color: var(--muted);
 }
 
-/* ---------- keyframes ---------- */
 @keyframes tick-flash {
   from {
     opacity: 0.5;
@@ -752,7 +702,6 @@ a {
   }
 }
 
-/* ---------- responsive ---------- */
 @media (max-width: 480px) {
   .actions-main {
     width: 100%;
@@ -761,12 +710,8 @@ a {
   .actions-main .btn {
     width: 100%;
   }
-  .speech-stages {
-    gap: 0.6rem;
-  }
 }
 
-/* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .reel-phrase,
   .timer-overlay,
@@ -776,8 +721,5 @@ a {
   .settings-panel,
   .course-menu {
     animation: none !important;
-  }
-  .speech-stage {
-    transition: none;
   }
 }

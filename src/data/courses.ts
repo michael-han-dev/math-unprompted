@@ -1,14 +1,8 @@
-/**
- * Topic lists, one course per syllabus in ./syllabi. `concepts` are definitions and objects,
- * `theorems` are named results. Both feed the spin; the list decides the label and the speech arc.
- */
-
 export type TopicKind = 'Definition' | 'Theorem';
 
 export interface Course {
   id: string;
   label: string;
-  /** Math symbol shown beside the course name. */
   glyph: string;
   concepts: string[];
   theorems: string[];
@@ -504,7 +498,6 @@ export interface CourseOption {
   glyph: string;
 }
 
-/** Dropdown entries: "All courses" followed by every course. */
 export const COURSE_OPTIONS: readonly CourseOption[] = [
   { id: ALL_COURSES_ID, label: 'All courses', glyph: '∀' },
   ...COURSES.map(({ id, label, glyph }) => ({ id, label, glyph })),
@@ -514,7 +507,6 @@ export function getCourseOption(id: string): CourseOption {
   return COURSE_OPTIONS.find((c) => c.id === id) ?? COURSE_OPTIONS[0];
 }
 
-/** Every topic of one course, or of all courses, without duplicates. */
 export function getPool(courseId: string): string[] {
   const courses = courseId === ALL_COURSES_ID ? COURSES : [COURSES.find((c) => c.id === courseId) ?? COURSES[0]];
   return [...new Set(courses.flatMap((c) => [...c.concepts, ...c.theorems]))];

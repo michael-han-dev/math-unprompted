@@ -22,7 +22,6 @@ interface Dot {
   alpha: number;
 }
 
-/** Vogel's phyllotaxis: dot i sits at radius √i and angle i × golden angle. */
 function build(width: number, height: number): Dot[] {
   const cx = width * CENTER.x;
   const cy = height * CENTER.y;
@@ -40,10 +39,6 @@ function build(width: number, height: number): Dot[] {
   return dots;
 }
 
-/**
- * Full-screen background of dots on a Fibonacci spiral. The pointer pushes nearby dots aside
- * and drags a wake behind it; each dot then springs back to its own home position.
- */
 export function SpiralField() {
   const ref = useRef<HTMLCanvasElement>(null);
 

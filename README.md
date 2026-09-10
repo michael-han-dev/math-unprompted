@@ -6,9 +6,21 @@ Made by [bymichaelhan](https://www.instagram.com/bymichaelhan/). Inspired by [Un
 
 ## How it works
 
-Pick a course and spin. The reel lands on a definition ("Open ball") or a theorem ("Heine–Borel"). A research timer starts; read up, then start the speech timer when you are ready. The speech arc is *Define it → Example → Why it matters* for a definition and *State it → Proof idea → Why it matters* for a theorem.
+Pick a course and spin. The reel lands on a definition ("Open ball") or a theorem ("Heine–Borel"). A research timer starts; read up, then start the speech timer when you are ready and talk until it runs out.
 
 Timer lengths and mute are in the settings dialog and are saved in your browser.
+
+## Dividing the minute
+
+The timer does not split the minute for you. This is a suggested split to practice against:
+
+| Seconds | Theorem | Definition |
+| --- | --- | --- |
+| 0–15 | State it in full, hypotheses included | Give the precise definition |
+| 15–40 | Give the proof idea: the one key step, not the whole proof | Give one example and one non-example |
+| 40–60 | Say why it matters: where it is used, or what breaks without the hypotheses | Say why it matters: what it lets you define or prove next |
+
+Two habits worth drilling. Say the hypotheses out loud every time, because that is what gets dropped under pressure. Leave the last ten seconds for a single closing sentence.
 
 ## Run it
 

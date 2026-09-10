@@ -1,5 +1,3 @@
-/** Synthesized UI sounds via Web Audio. No audio files, nothing to load. */
-
 let context: AudioContext | null = null;
 let muted = false;
 
@@ -17,7 +15,6 @@ function getContext(): AudioContext | null {
   }
 }
 
-/** Call from a user gesture so the browser lets us play later. */
 export function unlockAudio(): void {
   if (!muted) getContext();
 }
@@ -44,7 +41,6 @@ function tone(ctx: AudioContext, destination: AudioNode, spec: ToneSpec): void {
   osc.stop(spec.at + spec.duration + 0.03);
 }
 
-/** Short filtered click for each reel step. `volume` in [0, 1]. */
 export function playTick(volume = 1): void {
   if (muted) return;
   const ctx = getContext();
@@ -74,7 +70,6 @@ export function playTick(volume = 1): void {
   source.stop(now + length + 0.01);
 }
 
-/** Two-note rising ding when the reel lands. */
 export function playLand(): void {
   if (muted) return;
   const ctx = getContext();
@@ -87,7 +82,6 @@ export function playLand(): void {
   tone(ctx, bus, { frequency: 880, at: now + 0.09, duration: 0.5, type: 'sine', peak: 0.28 });
 }
 
-/** Four-note chime when a timer reaches zero. */
 export function playDone(): void {
   if (muted) return;
   const ctx = getContext();

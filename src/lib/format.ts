@@ -1,4 +1,3 @@
-/** "1:05" style clock for the countdown ring. */
 export function formatClock(seconds: number): string {
   const total = Math.max(0, Math.floor(seconds));
   const minutes = Math.floor(total / 60);
@@ -6,7 +5,6 @@ export function formatClock(seconds: number): string {
   return `${minutes}:${rest.toString().padStart(2, '0')}`;
 }
 
-/** "1 min", "1 min 30 sec", "45 sec" for labels and buttons. */
 export function formatDuration(seconds: number): string {
   const total = Math.max(0, Math.floor(seconds));
   const minutes = Math.floor(total / 60);

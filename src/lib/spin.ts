@@ -1,10 +1,6 @@
-/** Pure helpers for the slot-machine reel. No DOM, no timers, so they are unit-testable. */
-
 export const SPIN_DURATION_MS = 5760;
 export const SPIN_DURATION_REDUCED_MS = 600;
-/** How long after the planned end we force-land if the animation frame loop stalls. */
 export const SPIN_SAFETY_MARGIN_MS = 400;
-/** Topics landed on recently are avoided on the next spin. */
 export const RECENT_LIMIT = 5;
 
 export type Rng = () => number;
@@ -18,10 +14,6 @@ export function pickRandom<T>(pool: readonly T[], rng: Rng = Math.random): T {
   return pool[Math.floor(rng() * pool.length)];
 }
 
-/**
- * Choose the index the reel lands on. Never the current topic, and never one of the
- * recently landed topics, unless the pool is too small to allow that.
- */
 export function pickLanding(
   pool: readonly string[],
   current: string | null,
@@ -42,7 +34,6 @@ export function pickLanding(
 }
 
 export interface SpinPlan {
-  /** Number of reel steps from the current index to the landing index. */
   totalSteps: number;
   landIndex: number;
 }
@@ -52,10 +43,6 @@ export interface SpinOptions {
   maxLoops?: number;
 }
 
-/**
- * Plan a spin: pick where to land, then pad with whole loops so the reel visibly cycles.
- * Invariant: (currentIndex + totalSteps) % pool.length === landIndex.
- */
 export function planSpin(
   pool: readonly string[],
   currentIndex: number,
@@ -72,7 +59,6 @@ export function planSpin(
   return { totalSteps: loops * n + offset, landIndex };
 }
 
-/** Which step the reel should be showing at a given progress in [0, 1]. */
 export function stepAt(progress: number, totalSteps: number): number {
   return Math.min(totalSteps, Math.floor(easeOutCubic(progress) * totalSteps));
 }
@@ -81,7 +67,6 @@ export function indexAtStep(startIndex: number, step: number, poolSize: number):
   return (startIndex + step) % poolSize;
 }
 
-/** Append a topic to the recent list, keeping only the newest RECENT_LIMIT entries. */
 export function pushRecent(recent: readonly string[], topic: string): string[] {
   return [...recent.filter((t) => t !== topic), topic].slice(-RECENT_LIMIT);
 }

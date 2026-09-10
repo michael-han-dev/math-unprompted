@@ -9,7 +9,6 @@ import {
   stepAt,
 } from './spin';
 
-/** Deterministic rng cycling through a fixed list of values. */
 function seq(values: number[]) {
   let i = 0;
   return () => values[i++ % values.length];

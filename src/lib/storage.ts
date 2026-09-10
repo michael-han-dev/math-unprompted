@@ -1,5 +1,3 @@
-/** Settings persistence with clamping, so a stale or hand-edited value can't break the UI. */
-
 export const STORAGE_PREFIX = 'chalktalk:';
 
 export interface DurationRange {
@@ -11,7 +9,6 @@ export interface DurationRange {
 export const SPEECH_RANGE: DurationRange = { minSeconds: 60, maxSeconds: 600, defaultSeconds: 60 };
 export const RESEARCH_RANGE: DurationRange = { minSeconds: 60, maxSeconds: 3600, defaultSeconds: 600 };
 
-/** Round to whole minutes and clamp into the range. Non-numeric input falls back to the default. */
 export function clampDuration(seconds: number, range: DurationRange): number {
   if (!Number.isFinite(seconds)) return range.defaultSeconds;
   const minutes = Math.round(seconds / 60);
@@ -84,6 +81,5 @@ export function saveSettings(storage: StorageLike | null, settings: Settings): v
     storage.setItem(`${STORAGE_PREFIX}research`, String(clampDuration(settings.researchSeconds, RESEARCH_RANGE)));
     storage.setItem(`${STORAGE_PREFIX}muted`, String(settings.muted));
   } catch {
-    // Storage can be full or blocked. Settings still work for this session.
   }
 }

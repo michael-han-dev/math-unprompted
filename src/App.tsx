@@ -41,7 +41,6 @@ export function App() {
   const recentRef = useRef<string[]>([]);
   const rafRef = useRef<number | null>(null);
   const safetyRef = useRef<number | null>(null);
-  /** Element to refocus when the timer overlay closes. Captured before the overlay steals focus. */
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const reduced = useReducedMotion();
   const { seconds, start: startCountdown, stop: stopCountdown, set: setCountdown } = useCountdown(settings.speechSeconds);
@@ -169,7 +168,6 @@ export function App() {
     setPhase('idle');
   }, [stopCountdown]);
 
-  // Escape closes the timer overlay. On close, restore focus to whatever opened it.
   useEffect(() => {
     if (!inOverlay) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -240,7 +238,6 @@ export function App() {
         <TimerOverlay
           phase={phase}
           topic={landed}
-          kind={kindOf(landed)}
           seconds={seconds}
           totalSeconds={totalSeconds}
           speechSeconds={settings.speechSeconds}

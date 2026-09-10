@@ -3,7 +3,6 @@ interface Props {
   eyebrow: string;
   spinning: boolean;
   landed: boolean;
-  /** Changes on every reel step so the phrase re-mounts and replays its flash animation. */
   tickKey: number;
 }
 

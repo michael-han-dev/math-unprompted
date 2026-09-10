@@ -23,15 +23,12 @@ export function SettingsDialog({ open, onOpenChange, settings, onChange, disable
 
   const close = useCallback(() => onOpenChange(false), [onOpenChange]);
 
-  // Refocus the trigger after the dialog has actually closed. Doing it inside `close` is too
-  // early: the trigger is still inside an inert subtree until React re-renders.
   const wasOpenRef = useRef(false);
   useEffect(() => {
     if (wasOpenRef.current && !open) triggerRef.current?.focus();
     wasOpenRef.current = open;
   }, [open]);
 
-  // Escape closes; Tab cycles inside the panel.
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {

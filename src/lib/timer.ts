@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export function ringProgress(secondsLeft: number, totalSeconds: number): number {
+  if (totalSeconds <= 0) return 1;
+  return Math.min(1, Math.max(0, 1 - secondsLeft / totalSeconds));
+}
+
 export interface Countdown {
   seconds: number;
-  /** Start counting down from `total` seconds; `onDone` fires once when it hits zero. */
   start: (total: number, onDone: () => void) => void;
   stop: () => void;
-  /** Set the displayed value without running. */
   set: (seconds: number) => void;
 }
 
-/**
- * Deadline-based countdown. The display is derived from a fixed end timestamp on every
- * tick, so a throttled background tab can't make the clock drift.
- */
 export function useCountdown(initialSeconds: number): Countdown {
   const [seconds, setSeconds] = useState(initialSeconds);
   const intervalRef = useRef<number | null>(null);
