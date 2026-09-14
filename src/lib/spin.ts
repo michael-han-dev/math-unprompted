@@ -1,6 +1,8 @@
-export const SPIN_DURATION_MS = 5760;
+export const SPIN_DURATION_MS = 6912;
 export const SPIN_DURATION_REDUCED_MS = 600;
 export const SPIN_SAFETY_MARGIN_MS = 400;
+export const SPIN_STEPS = 40;
+export const SPIN_STEPS_REDUCED = 3;
 export const RECENT_LIMIT = 5;
 
 export type Rng = () => number;
@@ -33,14 +35,15 @@ export function pickLanding(
   return candidates[Math.floor(rng() * candidates.length)];
 }
 
-export interface SpinPlan {
-  totalSteps: number;
-  landIndex: number;
+function pickOther(n: number, avoid: ReadonlySet<number>, rng: Rng): number {
+  let i = Math.floor(rng() * n);
+  for (let k = 0; k < n && avoid.has(i); k++) i = (i + 1) % n;
+  return i;
 }
 
-export interface SpinOptions {
-  minLoops?: number;
-  maxLoops?: number;
+export interface SpinPlan {
+  sequence: number[];
+  landIndex: number;
 }
 
 export function planSpin(
@@ -48,23 +51,24 @@ export function planSpin(
   currentIndex: number,
   recent: readonly string[],
   rng: Rng = Math.random,
-  { minLoops = 3, maxLoops = 5 }: SpinOptions = {},
+  steps: number = SPIN_STEPS,
 ): SpinPlan {
   const n = pool.length;
-  if (n === 0) return { totalSteps: 0, landIndex: -1 };
+  if (n === 0) return { sequence: [], landIndex: -1 };
   const start = ((currentIndex % n) + n) % n;
   const landIndex = pickLanding(pool, pool[start], recent, rng);
-  const loops = minLoops + Math.floor(rng() * (maxLoops - minLoops + 1));
-  const offset = (landIndex - start + n) % n;
-  return { totalSteps: loops * n + offset, landIndex };
+  const sequence = [start];
+  for (let i = 1; i < steps; i++) {
+    const avoid = new Set([sequence[i - 1]]);
+    if (i === steps - 1) avoid.add(landIndex);
+    sequence.push(pickOther(n, avoid, rng));
+  }
+  sequence.push(landIndex);
+  return { sequence, landIndex };
 }
 
 export function stepAt(progress: number, totalSteps: number): number {
   return Math.min(totalSteps, Math.floor(easeOutCubic(progress) * totalSteps));
-}
-
-export function indexAtStep(startIndex: number, step: number, poolSize: number): number {
-  return (startIndex + step) % poolSize;
 }
 
 export function pushRecent(recent: readonly string[], topic: string): string[] {

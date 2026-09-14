@@ -61,7 +61,7 @@ export function playTick(volume = 1): void {
   filter.Q.value = 1.4;
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.5 * Math.max(0.05, volume), now + 0.001);
+  gain.gain.exponentialRampToValueAtTime(0.9 * Math.max(0.05, volume), now + 0.001);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + length);
   source.connect(filter);
   filter.connect(gain);

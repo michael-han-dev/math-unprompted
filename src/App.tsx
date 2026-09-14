@@ -12,7 +12,8 @@ import {
   SPIN_DURATION_MS,
   SPIN_DURATION_REDUCED_MS,
   SPIN_SAFETY_MARGIN_MS,
-  indexAtStep,
+  SPIN_STEPS,
+  SPIN_STEPS_REDUCED,
   pickRandom,
   planSpin,
   pushRecent,
@@ -89,13 +90,14 @@ export function App() {
 
     const n = pool.length;
     const startIndex = indexRef.current % n;
-    const { totalSteps, landIndex } = planSpin(
+    const { sequence, landIndex } = planSpin(
       pool,
       startIndex,
       recentRef.current,
       Math.random,
-      reduced ? { minLoops: 0, maxLoops: 0 } : {},
+      reduced ? SPIN_STEPS_REDUCED : SPIN_STEPS,
     );
+    const totalSteps = sequence.length - 1;
     const duration = reduced ? SPIN_DURATION_REDUCED_MS : SPIN_DURATION_MS;
     const startedAt = performance.now();
     let lastStep = -1;
@@ -120,7 +122,7 @@ export function App() {
       const step = stepAt(progress, totalSteps);
       if (step !== lastStep) {
         lastStep = step;
-        const index = indexAtStep(startIndex, step, n);
+        const index = sequence[step];
         indexRef.current = index;
         setDisplay(pool[index]);
         setTickKey((k) => k + 1);
@@ -144,6 +146,12 @@ export function App() {
       playDone();
     });
   }, [startCountdown, settings.speechSeconds]);
+
+  const finishSpeech = () => {
+    stopCountdown();
+    setPhase('done');
+    playDone();
+  };
 
   const startResearch = () => {
     if (!landed || locked) return;
@@ -243,6 +251,7 @@ export function App() {
           speechSeconds={settings.speechSeconds}
           onDoneResearch={finishResearch}
           onStartSpeech={startSpeech}
+          onDoneSpeech={finishSpeech}
           onClose={closeOverlay}
         />
       )}

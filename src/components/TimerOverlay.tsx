@@ -12,6 +12,7 @@ interface Props {
   speechSeconds: number;
   onDoneResearch: () => void;
   onStartSpeech: () => void;
+  onDoneSpeech: () => void;
   onClose: () => void;
 }
 
@@ -23,6 +24,7 @@ export function TimerOverlay({
   speechSeconds,
   onDoneResearch,
   onStartSpeech,
+  onDoneSpeech,
   onClose,
 }: Props) {
   const primaryRef = useRef<HTMLButtonElement>(null);
@@ -33,7 +35,6 @@ export function TimerOverlay({
 
   const isResearch = phase === 'research';
   const isReady = phase === 'ready';
-  const isSpeaking = phase === 'speech' || phase === 'done';
   const progress = isReady ? 0 : ringProgress(seconds, totalSeconds);
 
   const label = isResearch ? 'Research timer' : isReady ? 'Ready to speak' : 'Speech timer';
@@ -67,7 +68,12 @@ export function TimerOverlay({
               I'm ready to speak
             </button>
           )}
-          <button type="button" className="btn ghost" onClick={onClose} ref={isSpeaking ? primaryRef : undefined}>
+          {phase === 'speech' && (
+            <button type="button" className="btn primary" onClick={onDoneSpeech} ref={primaryRef}>
+              Done speaking
+            </button>
+          )}
+          <button type="button" className="btn ghost" onClick={onClose} ref={phase === 'done' ? primaryRef : undefined}>
             Close
           </button>
         </div>

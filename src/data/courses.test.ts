@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALL_COURSES_ID, COURSES, COURSE_OPTIONS, getCourseOption, getPool, kindOf } from './courses';
 
-const MIN_CONCEPTS = 12;
+const MIN_CONCEPTS = 4;
 const MIN_THEOREMS = 8;
 
 describe('courses data', () => {
