@@ -61,7 +61,6 @@ export const COURSES: readonly Course[] = [
       'Column rank equals row rank',
       'Null space of the dual map is the annihilator',
       'Fundamental theorem of algebra',
-      'Factorization of polynomials over ℂ',
       'Every operator on ℂⁿ has an eigenvalue',
       'Eigenvectors for distinct eigenvalues are independent',
       'Schur: every complex operator is upper-triangularizable',
