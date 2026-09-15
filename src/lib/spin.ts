@@ -1,7 +1,7 @@
-export const SPIN_DURATION_MS = 6912;
+export const SPIN_DURATION_MS = 3456;
 export const SPIN_DURATION_REDUCED_MS = 600;
 export const SPIN_SAFETY_MARGIN_MS = 400;
-export const SPIN_STEPS = 40;
+export const SPIN_STEPS = 20;
 export const SPIN_STEPS_REDUCED = 3;
 export const RECENT_LIMIT = 5;
 
